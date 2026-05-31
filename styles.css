@@ -103,11 +103,12 @@ p {
 }
 
 h1 {
-  max-width: 12ch;
+  max-width: 100%;
   margin-bottom: 28px;
-  font-size: clamp(3rem, 8vw, 6.8rem);
-  line-height: 0.92;
+  font-size: 5rem;
+  line-height: 1;
   letter-spacing: 0;
+  white-space: nowrap;
 }
 
 h2 {
@@ -412,6 +413,10 @@ h2 {
     padding-top: 12px;
   }
 
+  h1 {
+    font-size: 4rem;
+  }
+
   .results-grid {
     grid-template-columns: 1fr;
   }
@@ -428,6 +433,10 @@ h2 {
 @media (max-width: 560px) {
   .hero-content {
     padding: 24px;
+  }
+
+  h1 {
+    font-size: 2.8rem;
   }
 
   .search-row {
