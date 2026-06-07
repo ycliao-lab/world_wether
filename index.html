@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>全球天氣查詢</title>
+    <title>World Weather</title>
     <link rel="preconnect" href="https://api.open-meteo.com">
     <link rel="preconnect" href="https://geocoding-api.open-meteo.com">
     <link rel="stylesheet" href="styles.css">
@@ -16,63 +16,63 @@
           <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1800&q=82" alt="">
         </div>
         <div class="hero-content">
-          <p class="eyebrow">Open-Meteo 即時資料</p>
-          <h1 id="page-title">全球天氣查詢</h1>
+          <p class="eyebrow">Open-Meteo Live Data</p>
+          <h1 id="page-title">World Weather</h1>
           <form class="search-panel" id="search-form" autocomplete="off">
-            <label for="city-input">搜尋城市、地區或國家</label>
+            <label for="city-input">Search city, region, or country</label>
             <div class="search-row">
-              <input id="city-input" name="city" type="search" placeholder="例如：Tokyo、Paris、New York" required>
-              <button type="submit" id="search-button" aria-label="搜尋">
+              <input id="city-input" name="city" type="search" placeholder="e.g. Tokyo, Paris, New York" required>
+              <button type="submit" id="search-button" aria-label="Search">
                 <span aria-hidden="true">⌕</span>
-                <span>搜尋</span>
+                <span>Search</span>
               </button>
             </div>
           </form>
         </div>
       </section>
 
-      <section class="toolbar" aria-label="設定">
-        <div class="segmented" role="group" aria-label="溫度單位">
+      <section class="toolbar" aria-label="Settings">
+        <div class="segmented" role="group" aria-label="Temperature unit">
           <button class="unit-option active" type="button" data-unit="celsius">°C</button>
           <button class="unit-option" type="button" data-unit="fahrenheit">°F</button>
         </div>
         <button class="location-button" id="current-location" type="button">
           <span aria-hidden="true">⌖</span>
-          <span>使用目前位置</span>
+          <span>Use current location</span>
         </button>
       </section>
 
       <section class="status" id="status" role="status" aria-live="polite"></section>
 
-      <section class="results-grid" aria-label="天氣結果">
+      <section class="results-grid" aria-label="Weather results">
         <article class="current-card" id="current-card">
           <div>
-            <p class="section-label">目前天氣</p>
+            <p class="section-label">Current Weather</p>
             <h2 id="place-name">-</h2>
-            <p class="muted" id="place-meta">請先搜尋城市</p>
+            <p class="muted" id="place-meta">Please search for a city</p>
           </div>
           <div class="weather-now">
             <div class="weather-symbol" id="weather-symbol" aria-hidden="true">☀</div>
             <div>
               <p class="temperature" id="temperature">--°</p>
-              <p class="condition" id="condition">等待查詢</p>
+              <p class="condition" id="condition">Awaiting search</p>
             </div>
           </div>
           <dl class="metric-grid">
             <div>
-              <dt>體感</dt>
+              <dt>Feels Like</dt>
               <dd id="feels-like">--</dd>
             </div>
             <div>
-              <dt>濕度</dt>
+              <dt>Humidity</dt>
               <dd id="humidity">--</dd>
             </div>
             <div>
-              <dt>風速</dt>
+              <dt>Wind</dt>
               <dd id="wind">--</dd>
             </div>
             <div>
-              <dt>氣壓</dt>
+              <dt>Pressure</dt>
               <dd id="pressure">--</dd>
             </div>
           </dl>
@@ -81,21 +81,21 @@
         <article class="details-card">
           <div class="details-header">
             <div>
-              <p class="section-label">未來 24 小時</p>
-              <h2>逐小時預測</h2>
+              <p class="section-label">Next 24 Hours</p>
+              <h2>Hourly Forecast</h2>
             </div>
           </div>
-          <div class="hourly-strip" id="hourly-strip" aria-label="逐小時天氣"></div>
+          <div class="hourly-strip" id="hourly-strip" aria-label="Hourly weather"></div>
         </article>
       </section>
 
       <section class="forecast-section" aria-labelledby="forecast-title">
         <div class="section-heading">
           <div>
-            <p class="section-label">7 日趨勢</p>
-            <h2 id="forecast-title">每日預報</h2>
+            <p class="section-label">7-Day Trend</p>
+            <h2 id="forecast-title">Daily Forecast</h2>
           </div>
-          <p id="updated-at" class="muted">尚未更新</p>
+          <p id="updated-at" class="muted">Not yet updated</p>
         </div>
         <div class="forecast-list" id="forecast-list"></div>
       </section>
@@ -103,10 +103,10 @@
       <section class="recents" aria-labelledby="recent-title">
         <div class="section-heading">
           <div>
-            <p class="section-label">快速查詢</p>
-            <h2 id="recent-title">最近搜尋</h2>
+            <p class="section-label">Quick Lookup</p>
+            <h2 id="recent-title">Recent Searches</h2>
           </div>
-          <button id="clear-recents" type="button">清除</button>
+          <button id="clear-recents" type="button">Clear</button>
         </div>
         <div class="recent-list" id="recent-list"></div>
       </section>

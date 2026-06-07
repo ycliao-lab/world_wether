@@ -13,34 +13,34 @@ const clearRecentsButton = document.querySelector("#clear-recents");
 const recentList = document.querySelector("#recent-list");
 
 const weatherCodes = {
-  0: ["晴朗", "☀"],
-  1: ["大致晴朗", "🌤"],
-  2: ["局部多雲", "⛅"],
-  3: ["多雲", "☁"],
-  45: ["有霧", "🌫"],
-  48: ["霧凇", "🌫"],
-  51: ["毛毛雨", "🌦"],
-  53: ["毛毛雨", "🌦"],
-  55: ["較強毛毛雨", "🌧"],
-  56: ["凍毛毛雨", "🌧"],
-  57: ["強凍毛毛雨", "🌧"],
-  61: ["小雨", "🌧"],
-  63: ["降雨", "🌧"],
-  65: ["大雨", "🌧"],
-  66: ["凍雨", "🌧"],
-  67: ["強凍雨", "🌧"],
-  71: ["小雪", "🌨"],
-  73: ["降雪", "🌨"],
-  75: ["大雪", "❄"],
-  77: ["雪粒", "❄"],
-  80: ["短暫陣雨", "🌦"],
-  81: ["陣雨", "🌧"],
-  82: ["強陣雨", "⛈"],
-  85: ["短暫陣雪", "🌨"],
-  86: ["強陣雪", "❄"],
-  95: ["雷雨", "⛈"],
-  96: ["雷雨伴隨冰雹", "⛈"],
-  99: ["強雷雨伴隨冰雹", "⛈"],
+  0: ["Clear sky", "☀"],
+  1: ["Mainly clear", "🌤"],
+  2: ["Partly cloudy", "⛅"],
+  3: ["Overcast", "☁"],
+  45: ["Foggy", "🌫"],
+  48: ["Rime fog", "🌫"],
+  51: ["Light drizzle", "🌦"],
+  53: ["Drizzle", "🌦"],
+  55: ["Dense drizzle", "🌧"],
+  56: ["Freezing drizzle", "🌧"],
+  57: ["Dense freezing drizzle", "🌧"],
+  61: ["Light rain", "🌧"],
+  63: ["Rain", "🌧"],
+  65: ["Heavy rain", "🌧"],
+  66: ["Freezing rain", "🌧"],
+  67: ["Heavy freezing rain", "🌧"],
+  71: ["Light snow", "🌨"],
+  73: ["Snow", "🌨"],
+  75: ["Heavy snow", "❄"],
+  77: ["Snow grains", "❄"],
+  80: ["Light showers", "🌦"],
+  81: ["Showers", "🌧"],
+  82: ["Heavy showers", "⛈"],
+  85: ["Light snow showers", "🌨"],
+  86: ["Heavy snow showers", "❄"],
+  95: ["Thunderstorm", "⛈"],
+  96: ["Thunderstorm with hail", "⛈"],
+  99: ["Severe thunderstorm with hail", "⛈"],
 };
 
 const selectors = {
@@ -63,7 +63,7 @@ form.addEventListener("submit", async (event) => {
   const query = input.value.trim();
 
   if (!query) {
-    setStatus("請輸入想查詢的城市。", true);
+    setStatus("Please enter a city to search.", true);
     return;
   }
 
@@ -85,15 +85,15 @@ unitButtons.forEach((button) => {
 
 currentLocationButton.addEventListener("click", () => {
   if (!navigator.geolocation) {
-    setStatus("這個瀏覽器不支援定位功能。", true);
+    setStatus("Geolocation is not supported by this browser.", true);
     return;
   }
 
-  setStatus("正在取得目前位置...");
+  setStatus("Getting your current location...");
   navigator.geolocation.getCurrentPosition(
     async ({ coords }) => {
       await loadWeather({
-        name: "目前位置",
+        name: "Current Location",
         country: "",
         admin1: "",
         latitude: coords.latitude,
@@ -101,7 +101,7 @@ currentLocationButton.addEventListener("click", () => {
         timezone: "auto",
       });
     },
-    () => setStatus("無法取得位置權限，請改用城市搜尋。", true),
+    () => setStatus("Unable to get location permission. Please search by city instead.", true),
     { enableHighAccuracy: true, timeout: 10000 }
   );
 });
@@ -113,13 +113,13 @@ clearRecentsButton.addEventListener("click", () => {
 });
 
 async function searchByName(query) {
-  setLoading(true, "正在搜尋地點...");
+  setLoading(true, "Searching for location...");
 
   try {
     const params = new URLSearchParams({
       name: query,
       count: "1",
-      language: "zh",
+      language: "en",
       format: "json",
     });
     const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?${params}`);
@@ -129,14 +129,14 @@ async function searchByName(query) {
     const place = data.results?.[0];
 
     if (!place) {
-      setStatus(`找不到「${query}」，請試試英文城市名或加上國家。`, true);
+      setStatus(`Could not find "${query}". Try a different city name or add the country.`, true);
       return;
     }
 
     await loadWeather(place);
     addRecent(place);
   } catch {
-    setStatus("搜尋失敗，請確認網路連線後再試一次。", true);
+    setStatus("Search failed. Please check your network connection and try again.", true);
   } finally {
     setLoading(false);
   }
@@ -144,7 +144,7 @@ async function searchByName(query) {
 
 async function loadWeather(place) {
   state.lastPlace = place;
-  setLoading(true, "正在讀取天氣...");
+  setLoading(true, "Loading weather data...");
 
   try {
     const params = new URLSearchParams({
@@ -181,7 +181,7 @@ async function loadWeather(place) {
     renderWeather(place, data);
     setStatus("");
   } catch {
-    setStatus("讀取天氣資料失敗，請稍後再試。", true);
+    setStatus("Failed to load weather data. Please try again later.", true);
   } finally {
     setLoading(false);
   }
@@ -193,7 +193,7 @@ function renderWeather(place, data) {
   const unitSymbol = state.unit === "fahrenheit" ? "°F" : "°C";
   const windUnit = state.unit === "fahrenheit" ? "mph" : "km/h";
 
-  selectors.placeName.textContent = place.name || "目前位置";
+  selectors.placeName.textContent = place.name || "Current Location";
   selectors.placeMeta.textContent = formatPlaceMeta(place, data.timezone);
   selectors.weatherSymbol.textContent = icon;
   selectors.temperature.textContent = `${Math.round(current.temperature_2m)}°`;
@@ -202,7 +202,7 @@ function renderWeather(place, data) {
   selectors.humidity.textContent = `${current.relative_humidity_2m}%`;
   selectors.wind.textContent = `${Math.round(current.wind_speed_10m)} ${windUnit}`;
   selectors.pressure.textContent = `${Math.round(current.pressure_msl)} hPa`;
-  selectors.updatedAt.textContent = `更新時間：${formatDateTime(current.time)}`;
+  selectors.updatedAt.textContent = `Updated: ${formatDateTime(current.time)}`;
 
   renderHourly(data.hourly, unitSymbol, current.time);
   renderDaily(data.daily, unitSymbol);
@@ -221,7 +221,7 @@ function renderHourly(hourly, unitSymbol, currentTime) {
         <span>${formatHour(time)}</span>
         <span class="hour-icon" aria-hidden="true">${icon}</span>
         <strong>${Math.round(hourly.temperature_2m[sourceIndex])}${unitSymbol}</strong>
-        <small>降雨 ${hourly.precipitation_probability[sourceIndex] ?? 0}%</small>
+        <small>Rain ${hourly.precipitation_probability[sourceIndex] ?? 0}%</small>
       </div>
     `;
   }).join("");
@@ -249,7 +249,7 @@ function renderDaily(daily, unitSymbol) {
 
 function renderRecents() {
   if (!state.recents.length) {
-    recentList.innerHTML = `<p class="empty-state">搜尋過的城市會出現在這裡。</p>`;
+    recentList.innerHTML = `<p class="empty-state">Cities you search for will appear here.</p>`;
     return;
   }
 
@@ -301,17 +301,17 @@ function setStatus(message, isError = false) {
 }
 
 function describeWeather(code) {
-  return weatherCodes[code] || ["天氣變化中", "🌡"];
+  return weatherCodes[code] || ["Changing weather", "🌡"];
 }
 
 function formatPlaceMeta(place, timezone) {
   const pieces = [place.admin1, place.country].filter(Boolean);
-  const suffix = pieces.length ? pieces.join("，") : "座標查詢";
-  return `${suffix} · ${timezone || place.timezone || "自動時區"}`;
+  const suffix = pieces.length ? pieces.join(", ") : "Coordinate lookup";
+  return `${suffix} · ${timezone || place.timezone || "Auto timezone"}`;
 }
 
 function formatDateTime(value) {
-  return new Intl.DateTimeFormat("zh-TW", {
+  return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -320,16 +320,16 @@ function formatDateTime(value) {
 }
 
 function formatHour(value) {
-  return new Intl.DateTimeFormat("zh-TW", {
+  return new Intl.DateTimeFormat("en-US", {
     hour: "2-digit",
     minute: "2-digit",
   }).format(parseLocalTime(value));
 }
 
 function formatDay(value, index) {
-  if (index === 0) return "今天";
-  if (index === 1) return "明天";
-  return new Intl.DateTimeFormat("zh-TW", {
+  if (index === 0) return "Today";
+  if (index === 1) return "Tomorrow";
+  return new Intl.DateTimeFormat("en-US", {
     weekday: "short",
     month: "numeric",
     day: "numeric",
